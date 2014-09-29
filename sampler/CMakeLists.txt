@@ -1,3 +1,6 @@
+# Copyright Louis Dionne 2014
+# Distributed under the Boost Software License, Version 1.0.
+
 #=============================================================================
 # Setup compiler flags
 #=============================================================================
@@ -16,13 +19,13 @@ append_flag(CXX_FLAGS HAS_WNO_LONG_LONG_FLAG             -Wno-long-long)
 append_flag(CXX_FLAGS HAS_WNO_UNUSED_LOCAL_TYPEDEFS_FLAG -Wno-unused-local-typedefs)
 append_flag(CXX_FLAGS HAS_WNO_UNUSED_PARAMETER_FLAG      -Wno-unused-parameter)
 append_flag(CXX_FLAGS HAS_WWRITE_STRINGS_FLAG            -Wwrite-strings)
-append_flag(CXX_FLAGS HAS_STDCXX1Y_FLAG                  -std=c++1y)
+append_flag(CXX_FLAGS HAS_STDCXX1Y_FLAG                  -std=c++11)
 append_flag(CXX_FLAGS HAS_PEDANTIC_FLAG                  -pedantic)
 
 add_definitions(${CXX_FLAGS})
 
 #=============================================================================
-# Setup targets
+# Setup the `sampler` executable
 #=============================================================================
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 add_executable(sampler sampler.cpp)

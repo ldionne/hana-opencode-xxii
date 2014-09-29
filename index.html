@@ -163,13 +163,37 @@ _main:
 
 Lequel occupe le plus petit espace mémoire?
 
-%%smallest%%
+```cpp
+template <typename ...T>
+auto smallest = minimum_by(ordering(sizeof_), tuple(type<T>...));
+
+struct Foo { int* p; };
+
+int main() {
+    assert((
+        smallest<int, float, char, double, std::string, Foo> == type<char>
+    ));
+}
+```
 
 ----
 
 Lesquels sont builtins?
 
-%%filter_builtins%%
+```cpp
+template <typename ...T>
+auto builtins = filter(tuple(type<T>...), trait<std::is_fundamental>);
+
+struct Foo { int* p; };
+
+int main() {
+    assert((
+        builtins<int, float, Foo, char, double, std::string>
+        ==
+        tuple(type<int>, type<float>, type<char>, type<double>)
+    ));
+}
+```
 
 ====================
 

@@ -1,10 +1,13 @@
+# Adapted from
+# http://github.com/tzlaine/type_erasure
+#
+# All credits to Zach Laine.
+
 cmake_minimum_required(VERSION 3.0)
 enable_testing()
 
-# Sets CODE_SAMPLES and creates the samples target.
+file(GLOB CODE_SAMPLES code/*.cpp)
 add_subdirectory(code)
-
-# Creates the sampler executable.
 add_subdirectory(sampler)
 
 add_custom_command(

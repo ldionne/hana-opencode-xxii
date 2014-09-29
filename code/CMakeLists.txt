@@ -1,3 +1,6 @@
+# Copyright Louis Dionne 2014
+# Distributed under the Boost Software License, Version 1.0.
+
 #=============================================================================
 # Setup compiler flags for code samples
 #=============================================================================
@@ -28,7 +31,7 @@ include_directories(ext/hana/include)
 #=============================================================================
 add_custom_target(samples)
 
-file(GLOB CODE_SAMPLES *.cpp)
+# CODE_SAMPLES is set in the parent directory
 foreach(sample IN LISTS CODE_SAMPLES)
     file(RELATIVE_PATH sample_target ${CMAKE_CURRENT_SOURCE_DIR} ${sample})
     string(REPLACE ".cpp" "" sample_target "${sample_target}")
