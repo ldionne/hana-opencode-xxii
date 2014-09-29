@@ -26,20 +26,166 @@
 ====================
 
 ## Plan de match
-- Section 1
-- ...
+- Méta-wut?
+- Exemples
+- Comment ça marche?
 
 ==============================================================================
 
-## Section 1
+### Modèles de compilation
+
+----
+
+### Ruby
+
+Fichier source -> Interpréteur -> Travail
+
+----
+
+### C++
+
+Fichier source -> Compilateur -> Fichier exécutable -> Travail
 
 ====================
 
-### ...
+En C++, les types n'existent que pour le compilateur.<br>
+Le runtime n'a aucune notion de type.
+
+Note:
+En réalité, on a la RTTI, mais c'est tellement primitif qu'on peut l'ignorer.
+
+====================
+
+### À quoi ça sert la métaprog?
+
+====================
+
+### Déroulage de boucle
+
+```cpp
+for (int i = 0; i < 4; ++i)
+    f();
+```
+
+devient
+
+```cpp
+f(); f(); f(); f();
+```
+
+====================
+
+### Calcul sur des types
+
+Lequel occupe le plus grand espace mémoire?<br>
+Lesquels sont builtins?
+
+```cpp
+struct Foo { int* p; };
+
+int, float, char, double, std::string
+```
+
+====================
+
+### DSLs
+
+On construit un arbre à partir d'une expression
+
+```cpp
+Matrix a = ...;
+Matrix b = ...;
+
+a + b;  // je veux un arbre qui représente l'expression "Matrix + Matrix"
+```
+
+----
+
+Ensuite on interprète l'arbre comme ça nous chante
+
+```cpp
+Matrix a = ...;
+Matrix b = ...;
+
+int i = (a + b)[3][5]; // calcule seulement a[3][5] + b[3][5]!
+```
+
+====================
+
+### Il y a plus
+
+- Parallélisation automatique
+- Analyse dimensionnelle
+- Introspection
+- etc...
 
 ==============================================================================
 
-## Section 2
+## Exemples
+
+====================
+
+### Déroulage de boucle
+
+```cpp
+void f();
+
+int main() {
+    int_<10>.times(f);
+}
+```
+
+----
+
+### Assembleur généré
+
+```asm
+_main:
+    # snip
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    callq   __Z1fv
+    xorl    %eax, %eax
+    popq    %rbp
+    retq
+```
+
+====================
+
+### Calcul sur des types
+
+Lequel occupe le plus grand espace mémoire?
+
+```cpp
+template <typename ...T>
+using smallest = decltype(
+    minimum_by(ordering(sizeof_), tuple(type<T>...))
+);
+
+struct Foo { int* p; };
+
+int main() {
+    assert((
+        smallest<int, float, char, double, std::string, Foo> == type<char>
+    ));
+}
+```
+
+----
+
+Lesquels sont builtins?
+
+```cpp
+template <typename ...T>
+auto builtins = filter(trait<std::is_fundamental>, )
+```
 
 ====================
 
