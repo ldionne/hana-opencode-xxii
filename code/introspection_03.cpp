@@ -1,7 +1,6 @@
 // Copyright Louis Dionne 2014
 // Distributed under the Boost Software License, Version 1.0.
 
-#include <boost/fusion/include/at_key.hpp>
 #include <boost/fusion/include/define_assoc_struct.hpp>
 #include <boost/fusion/include/for_each.hpp>
 
@@ -27,6 +26,5 @@ struct print {
 int main() {
     demo::Foo foo(1, 'x', "bonjour");
     for_each(foo, print());
-    assert(at_key<keys::s>(foo) == "bonjour");
 }
 // end-sample

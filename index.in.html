@@ -95,6 +95,44 @@ f(); f(); f(); f();
 
 ====================
 
+### Introspection
+
+Comment itérer sur un user-defined type?
+
+```cpp
+struct Foo {
+    int i;
+    char c;
+    std::string s;
+};
+
+int main() {
+    Foo foo{1, 'x', "bonjour"};
+    for (auto member: foo) {
+        // marche pas!
+    }
+}
+```
+
+====================
+
+### Calcul sur des types
+
+Lequel occupe le plus petit espace mémoire?
+
+```cpp
+struct Foo { int* p; };
+
+int, float, char, double, std::string
+```
+
+Note:
+En C++, les types n'existent que pour le compilateur.
+Le runtime n'a aucune notion de type.
+En réalité, on a la RTTI, mais c'est tellement primitif qu'on peut l'ignorer.
+
+====================
+
 ### DSLs
 
 On construit un arbre à partir d'une expression
@@ -119,54 +157,9 @@ int i = (a + b)[3][5]; // calcule seulement a[3][5] + b[3][5]!
 
 ====================
 
-### Calcul sur des types
-
-----
-
-En C++, les types n'existent que pour le compilateur.<br>
-Le runtime n'a aucune notion de type.
-
-Note:
-En réalité, on a la RTTI, mais c'est tellement primitif qu'on peut l'ignorer.
-
-----
-
-Lequel occupe le plus petit espace mémoire?<br>
-Lesquels sont builtins?
-
-```cpp
-struct Foo { int* p; };
-
-int, float, char, double, std::string
-```
-
-====================
-
-### Introspection
-
-Comment itérer sur un user-defined type?
-
-```cpp
-struct Foo {
-    int i;
-    char c;
-    std::string s;
-};
-
-int main() {
-    Foo foo{1, 'x', "bonjour"};
-    for (auto member: foo) {
-        // marche pas!
-    }
-}
-```
-
-====================
-
 ### Il y a plus
 
 - Gestion de dépendences
-- Parallélisation automatique
 - Analyse dimensionnelle
 - etc...
 
@@ -215,12 +208,6 @@ _main:
 Lequel occupe le plus petit espace mémoire?
 
 %%smallest_14%%
-
-----
-
-Lesquels sont builtins?
-
-%%filter_builtins_14%%
 
 ====================
 

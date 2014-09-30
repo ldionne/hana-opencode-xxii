@@ -4,10 +4,7 @@
 #define BOOST_PP_VARIADICS 1
 #include <boost/hana/foldable/record_mcd.hpp>
 #include <boost/hana/foreign.hpp>
-#include <boost/hana/maybe.hpp>
 #include <boost/hana/record/macros.hpp>
-#include <boost/hana/searchable/record_mcd.hpp>
-#include <boost/hana/string.hpp>
 
 #include <cassert>
 #include <iostream>
@@ -29,7 +26,5 @@ int main() {
     for_each(foo, [](auto member) {
         std::cout << member << std::endl;
     });
-
-    assert(lookup(foo, BOOST_HANA_STRING("s")) == just("bonjour"));
 }
 // end-sample
