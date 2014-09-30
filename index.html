@@ -293,54 +293,54 @@ assert(world.dependencies == tuple(hello));
 ----
 
 ```cpp
-    auto depends_on = infix(fix([](auto depends_on, auto f, auto g) {
-        return eval_if(g ^in^ f.dependencies,
-            always(true_),
-            [=](auto _) {
-                return any(_(f).dependencies, [=](auto dep) {
-                    return depends_on(dep, g);
-                });
-            }
-        );
-    }));
+auto depends_on = infix(fix([](auto depends_on, auto f, auto g) {
+    return eval_if(g ^in^ f.dependencies,
+        always(true_),
+        [=](auto _) {
+            return any(_(f).dependencies, [=](auto dep) {
+                return depends_on(dep, g);
+            });
+        }
+    );
+}));
 ```
 
 ----
 
 ```cpp
-        // par exemple
-        auto hello = computation([] {
-            std::cout << "hello";
-        });
+// par exemple
+auto hello = computation([] {
+    std::cout << "hello";
+});
 
-        auto world = computation([] {
-            std::cout << "world!" << std::endl;
-        }, hello);
+auto world = computation([] {
+    std::cout << "world!" << std::endl;
+}, hello);
 
-        assert(world ^depends_on^ hello);
+assert(world ^depends_on^ hello);
 ```
 
 ----
 
 ```cpp
-    auto linearized = [=](auto fs) {
-        return sort_by(flip(depends_on), fs);
-    };
+auto linearized = [](auto fs) {
+    return sort_by(flip(depends_on), fs);
+};
 ```
 
 ----
 
 ```cpp
-        // par exemple
-        auto hello = computation([] {
-            std::cout << "hello";
-        });
+// par exemple
+auto hello = computation([] {
+    std::cout << "hello";
+});
 
-        auto world = computation([] {
-            std::cout << "world!" << std::endl;
-        }, hello);
+auto world = computation([] {
+    std::cout << "world!" << std::endl;
+}, hello);
 
-        assert(linearized(tuple(world, hello)) == tuple(hello, world));
+assert(linearized(tuple(world, hello)) == tuple(hello, world));
 ```
 
 ====================

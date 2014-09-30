@@ -75,6 +75,33 @@ namespace boost { namespace hana {
     };
 }}
 
+// sample(dependency_management_14-depends_on)
+auto depends_on = infix(fix([](auto depends_on, auto f, auto g) {
+    return eval_if(g ^in^ f.dependencies,
+        always(true_),
+        [=](auto _) {
+            return any(_(f).dependencies, [=](auto dep) {
+                return depends_on(dep, g);
+            });
+        }
+    );
+}));
+// end-sample
+
+// sample(dependency_management_14-linearized)
+auto linearized = [](auto fs) {
+    return sort_by(flip(depends_on), fs);
+};
+// end-sample
+
+auto all_dependencies = fix([](auto all_dependencies, auto f) {
+    auto other_deps = flatten(fmap(f.dependencies, all_dependencies));
+    return unique(concat(f.dependencies, other_deps));
+});
+
+auto independent = [](auto f, auto g) {
+    return !(f ^depends_on^ g) && !(g ^depends_on^ f);
+};
 
 #if 0
 auto parallelize = [](auto f) {
@@ -111,66 +138,38 @@ auto print = [](auto s) {
 
 
 int main() {
-// sample(dependency_management_14-depends_on)
-    auto depends_on = infix(fix([](auto depends_on, auto f, auto g) {
-        return eval_if(g ^in^ f.dependencies,
-            always(true_),
-            [=](auto _) {
-                return any(_(f).dependencies, [=](auto dep) {
-                    return depends_on(dep, g);
-                });
-            }
-        );
-    }));
-// end-sample
 
     {
 // sample(dependency_management_14-depends_on_example)
-        // par exemple
-        auto hello = computation([] {
-            std::cout << "hello";
-        });
+// par exemple
+auto hello = computation([] {
+    std::cout << "hello";
+});
 
-        auto world = computation([] {
-            std::cout << "world!" << std::endl;
-        }, hello);
+auto world = computation([] {
+    std::cout << "world!" << std::endl;
+}, hello);
 
-        assert(world ^depends_on^ hello);
+assert(world ^depends_on^ hello);
 // end-sample
     }
-
-
-// sample(dependency_management_14-linearized)
-    auto linearized = [=](auto fs) {
-        return sort_by(flip(depends_on), fs);
-    };
-// end-sample
 
     {
 // sample(dependency_management_14-linearized_example)
-        // par exemple
-        auto hello = computation([] {
-            std::cout << "hello";
-        });
+// par exemple
+auto hello = computation([] {
+    std::cout << "hello";
+});
 
-        auto world = computation([] {
-            std::cout << "world!" << std::endl;
-        }, hello);
+auto world = computation([] {
+    std::cout << "world!" << std::endl;
+}, hello);
 
-        assert(linearized(tuple(world, hello)) == tuple(hello, world));
+assert(linearized(tuple(world, hello)) == tuple(hello, world));
 // end-sample
     }
 
 
-
-    auto all_dependencies = fix([](auto all_dependencies, auto f) {
-        auto other_deps = flatten(fmap(f.dependencies, all_dependencies));
-        return unique(concat(f.dependencies, other_deps));
-    });
-
-    auto independent = [=](auto f, auto g) {
-        return !(f ^depends_on^ g) && !(g ^depends_on^ f);
-    };
     (void)independent;
     (void)all_dependencies;
 
