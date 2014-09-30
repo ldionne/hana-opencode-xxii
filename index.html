@@ -38,25 +38,45 @@
 
 ### Ruby
 
-Fichier source -> Interpréteur -> Travail
+Fichier source<br>
+    &#8595;<br>
+Interpréteur<br>
+    &#8595;<br>
+Travail
 
 ----
 
 ### C++
 
-Fichier source -> Compilateur -> Fichier exécutable -> Travail
+Fichier source<br>
+    &#8595;<br>
+Compilateur<br>
+    &#8595;<br>
+Fichier exécutable<br>
+    &#8595;<br>
+Travail
 
 ====================
 
-En C++, les types n'existent que pour le compilateur.<br>
-Le runtime n'a aucune notion de type.
+### Compilateur == VM qui génère du code
 
-Note:
-En réalité, on a la RTTI, mais c'est tellement primitif qu'on peut l'ignorer.
+----
+
+### C++
+
+Fichier source<br>
+    &#8595;<br>
+Compilateur<br>
+    &#8595;<br>
+Travail (métaprog)<br>
+    &#8595;<br>
+Fichier exécutable<br>
+    &#8595;<br>
+Travail
 
 ====================
 
-### À quoi ça sert la métaprog?
+### À quoi ça sert?
 
 ====================
 
@@ -71,19 +91,6 @@ devient
 
 ```cpp
 f(); f(); f(); f();
-```
-
-====================
-
-### Calcul sur des types
-
-Lequel occupe le plus petit espace mémoire?<br>
-Lesquels sont builtins?
-
-```cpp
-struct Foo { int* p; };
-
-int, float, char, double, std::string
 ```
 
 ====================
@@ -112,11 +119,54 @@ int i = (a + b)[3][5]; // calcule seulement a[3][5] + b[3][5]!
 
 ====================
 
+### Calcul sur des types
+
+----
+
+En C++, les types n'existent que pour le compilateur.<br>
+Le runtime n'a aucune notion de type.
+
+Note:
+En réalité, on a la RTTI, mais c'est tellement primitif qu'on peut l'ignorer.
+
+----
+
+Lequel occupe le plus petit espace mémoire?<br>
+Lesquels sont builtins?
+
+```cpp
+struct Foo { int* p; };
+
+int, float, char, double, std::string
+```
+
+====================
+
+### Introspection
+
+Comment itérer sur un user-defined type?
+
+```cpp
+struct Foo {
+    int i;
+    char c;
+    std::string s;
+};
+
+int main() {
+    Foo foo{1, 'x', "bonjour"};
+    for (auto member: foo) {
+        // marche pas!
+    }
+}
+```
+
+====================
+
 ### Il y a plus
 
 - Parallélisation automatique
 - Analyse dimensionnelle
-- Introspection
 - etc...
 
 ==============================================================================
@@ -155,6 +205,35 @@ _main:
     xorl    %eax, %eax
     popq    %rbp
     retq
+```
+
+====================
+
+### Introspection
+
+```cpp
+struct Foo {
+    BOOST_HANA_DEFINE_RECORD_INTRUSIVE(Foo,
+        (int, i),
+        (char, c),
+        (std::string, s)
+    );
+};
+```
+
+----
+
+```cpp
+int main() {
+    Foo foo{1, 'x', "bonjour"};
+    for_each(foo, [](auto member) {
+        std::cout << member << std::endl;
+    });
+
+    assert(
+        lookup(foo, BOOST_HANA_STRING("s")) == just("bonjour")
+    );
+}
 ```
 
 ====================
