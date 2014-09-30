@@ -103,6 +103,10 @@ auto independent = [](auto f, auto g) {
     return !(f ^depends_on^ g) && !(g ^depends_on^ f);
 };
 
+auto is_circular = [](auto f, auto g) {
+    return f ^depends_on^ g && g ^depends_on^ f;
+};
+
 #if 0
 auto parallelize = [](auto f) {
     auto fs = linearized(cons(f, all_dependencies(f)));
@@ -172,6 +176,7 @@ assert(linearized(tuple(world, hello)) == tuple(hello, world));
 
     (void)independent;
     (void)all_dependencies;
+    (void)is_circular;
 
 
 
