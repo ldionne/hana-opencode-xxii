@@ -1,23 +1,27 @@
 // Copyright Louis Dionne 2014
 // Distributed under the Boost Software License, Version 1.0.
 
+#include <boost/hana/ext/std/integral_constant.hpp>
 #include <boost/hana/tuple.hpp>
 #include <boost/hana/type.hpp>
 
 #include <cassert>
 #include <string>
+#include <type_traits>
 using namespace boost::hana;
 
 
-// sample(smallest)
+// sample(filter_builtins_14)
 template <typename ...T>
-auto smallest = minimum_by(ordering(sizeof_), tuple(type<T>...));
+auto builtins = filter(tuple(type<T>...), trait<std::is_fundamental>);
 
 struct Foo { int* p; };
 
 int main() {
     assert((
-        smallest<int, float, char, double, std::string, Foo> == type<char>
+        builtins<int, float, Foo, char, double, std::string>
+        ==
+        tuple(type<int>, type<float>, type<char>, type<double>)
     ));
 }
 // end-sample

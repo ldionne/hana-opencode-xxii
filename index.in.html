@@ -28,7 +28,7 @@
 ## Plan de match
 - Méta-wut?
 - Exemples
-- Comment ça marche?
+- Démo
 
 ==============================================================================
 
@@ -165,6 +165,7 @@ int main() {
 
 ### Il y a plus
 
+- Gestion de dépendences
 - Parallélisation automatique
 - Analyse dimensionnelle
 - etc...
@@ -177,13 +178,7 @@ int main() {
 
 ### Déroulage de boucle
 
-```cpp
-void f();
-
-int main() {
-    int_<10>.times(f);
-}
-```
+%%loop_unrolling_14%%
 
 ----
 
@@ -211,11 +206,7 @@ _main:
 
 ### Introspection
 
-%%introspection-declare%%
-
-----
-
-%%introspection-use%%
+%%introspection_14%%
 
 ====================
 
@@ -223,13 +214,39 @@ _main:
 
 Lequel occupe le plus petit espace mémoire?
 
-%%smallest%%
+%%smallest_14%%
 
 ----
 
 Lesquels sont builtins?
 
-%%filter_builtins%%
+%%filter_builtins_14%%
+
+====================
+
+### Gestion de dépendences
+
+%%dependency_management_14-computation%%
+
+----
+
+%%dependency_management_14-depends_on%%
+
+----
+
+%%dependency_management_14-depends_on_example%%
+
+----
+
+%%dependency_management_14-linearized%%
+
+----
+
+%%dependency_management_14-linearized_example%%
+
+====================
+
+### Maintenant, cuisinons!
 
 ====================
 

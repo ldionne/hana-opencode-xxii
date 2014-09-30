@@ -15,7 +15,7 @@
 using namespace boost::hana;
 
 
-// sample(introspection-declare)
+// sample(introspection_14)
 struct Foo {
     BOOST_HANA_DEFINE_RECORD_INTRUSIVE(Foo,
         (int, i),
@@ -23,17 +23,13 @@ struct Foo {
         (std::string, s)
     );
 };
-// end-sample
 
-// sample(introspection-use)
 int main() {
     Foo foo{1, 'x', "bonjour"};
     for_each(foo, [](auto member) {
         std::cout << member << std::endl;
     });
 
-    assert(
-        lookup(foo, BOOST_HANA_STRING("s")) == just("bonjour")
-    );
+    assert(lookup(foo, BOOST_HANA_STRING("s")) == just("bonjour"));
 }
 // end-sample
