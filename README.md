@@ -3,7 +3,7 @@ Présentation à l'[OpenCode XXII](http://opencode.ca).
 La présentation utilise [reveal.js](https://github.com/hakimel/reveal.js).
 
 ## Utilisation de base
-Aller à https://ldionne.github.io/hana-opencode-xxii ou ouvrir le fichier
+Aller à https://ldionne.github.io/opencode-xxii-hana ou ouvrir le fichier
 index.html avec un navigateur.
 
 ## Utilisation avancée
